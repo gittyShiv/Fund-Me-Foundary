@@ -1,4 +1,4 @@
-name: CI
+name: Foundry CI
 
 on:
   push:
@@ -10,10 +10,12 @@ env:
 
 jobs:
   check:
-    name: Foundry project
+    name: Build & Test with Foundry
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -21,20 +23,14 @@ jobs:
         uses: foundry-rs/foundry-toolchain@v1
 
       - name: Show Forge version
-        run: |
-          forge --version
+        run: forge --version
 
-      - name: Run Forge fmt
-        run: |
-          forge fmt --check
-        id: fmt
+      - name: Format check
+        run: forge fmt --check
 
-      - name: Run Forge build
-        run: |
-          forge build --sizes
-        id: build
+      - name: Build contracts
+        run: forge build --sizes
 
-      - name: Run Forge tests
-        run: |
-          forge test -vvv
-        id: test
+      - name: Run tests
+        run: forge test -vvv
+
